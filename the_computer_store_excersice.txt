@@ -1,0 +1,458 @@
+GO the website 
+
+This excersice was done on mysql
+
+https://en.wikibooks.org/wiki/SQL_Exercises/The_computer_store
+
+
+1. create database 
+-----------------------------------
+creaste database the_computer_store
+
+2. create tables
+------------------------------------
+CREATE TABLE Manufacturers (
+  Code INTEGER,
+  Name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (Code)   
+);
+
+CREATE TABLE Products (
+  Code INTEGER,
+  Name VARCHAR(255) NOT NULL ,
+  Price DECIMAL NOT NULL ,
+  Manufacturer INTEGER NOT NULL,
+  PRIMARY KEY (Code), 
+  FOREIGN KEY (Manufacturer) REFERENCES Manufacturers(Code)
+) ENGINE=INNODB;
+
+3 insert data. 
+------------------------------------
+INSERT INTO Manufacturers(Code,Name) VALUES(1,'Sony');
+INSERT INTO Manufacturers(Code,Name) VALUES(2,'Creative Labs');
+INSERT INTO Manufacturers(Code,Name) VALUES(3,'Hewlett-Packard');
+INSERT INTO Manufacturers(Code,Name) VALUES(4,'Iomega');
+INSERT INTO Manufacturers(Code,Name) VALUES(5,'Fujitsu');
+INSERT INTO Manufacturers(Code,Name) VALUES(6,'Winchester');
+
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(1,'Hard drive',240,5);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(2,'Memory',120,6);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(3,'ZIP drive',150,4);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(4,'Floppy disk',5,6);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(5,'Monitor',240,1);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(6,'DVD drive',180,2);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(7,'CD drive',90,2);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(8,'Printer',270,3);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(9,'Toner cartridge',66,3);
+INSERT INTO Products(Code,Name,Price,Manufacturer) VALUES(10,'DVD burner',180,2);
+
+Exercises
+----------------------------------
+1. Select the names of all the products in the store.
+
+mysql> select * from products;
++------+-----------------+-------+--------------+
+| Code | Name            | Price | Manufacturer |
++------+-----------------+-------+--------------+
+|    1 | Hard drive      |   240 |            5 |
+|    2 | Memory          |   120 |            6 |
+|    3 | ZIP drive       |   150 |            4 |
+|    4 | Floppy disk     |     5 |            6 |
+|    5 | Monitor         |   240 |            1 |
+|    6 | DVD drive       |   180 |            2 |
+|    7 | CD drive        |    90 |            2 |
+|    8 | Printer         |   270 |            3 |
+|    9 | Toner cartridge |    66 |            3 |
+|   10 | DVD burner      |   180 |            2 |
++------+-----------------+-------+--------------+
+10 rows in set (0.00 sec)
+
+2. Select the names and the prices of all the products in the store.
+
+mysql> select name,price from products;
++-----------------+-------+
+| name            | price |
++-----------------+-------+
+| Hard drive      |   240 |
+| Memory          |   120 |
+| ZIP drive       |   150 |
+| Floppy disk     |     5 |
+| Monitor         |   240 |
+| DVD drive       |   180 |
+| CD drive        |    90 |
+| Printer         |   270 |
+| Toner cartridge |    66 |
+| DVD burner      |   180 |
++-----------------+-------+
+10 rows in set (0.00 sec)
+
+3. Select the name of the products with a price less than or equal to $200.
+
+mysql> select name, price from products where price <= 200;
++-----------------+-------+
+| name            | price |
++-----------------+-------+
+| Memory          |   120 |
+| ZIP drive       |   150 |
+| Floppy disk     |     5 |
+| DVD drive       |   180 |
+| CD drive        |    90 |
+| Toner cartridge |    66 |
+| DVD burner      |   180 |
++-----------------+-------+
+7 rows in set (0.00 sec)
+
+
+4. Select all the products with a price between $60 and $120.
+
+mysql> select * from products where price between 60 and 120;
++------+-----------------+-------+--------------+
+| Code | Name            | Price | Manufacturer |
++------+-----------------+-------+--------------+
+|    2 | Memory          |   120 |            6 |
+|    7 | CD drive        |    90 |            2 |
+|    9 | Toner cartridge |    66 |            3 |
++------+-----------------+-------+--------------+
+3 rows in set (0.00 sec)
+
+5. Select the name and price in cents (i.e., the price must be multiplied by 100).
+
+mysql> select name, price*100 as "price in cents" from products;
++-----------------+----------------+
+| name            | price in cents |
++-----------------+----------------+
+| Hard drive      |          24000 |
+| Memory          |          12000 |
+| ZIP drive       |          15000 |
+| Floppy disk     |            500 |
+| Monitor         |          24000 |
+| DVD drive       |          18000 |
+| CD drive        |           9000 |
+| Printer         |          27000 |
+| Toner cartridge |           6600 |
+| DVD burner      |          18000 |
++-----------------+----------------+
+10 rows in set (0.00 sec)
+
+6. Compute the average price of all the products.
+
+mysql> select avg(price) from products;
++------------+
+| avg(price) |
++------------+
+|   154.1000 |
++------------+
+1 row in set (0.00 sec)
+
+7. Compute the average price of all products with manufacturer code equal to 2.
+
+mysql> select avg(price) from products where manufacturer = 2;
++------------+
+| avg(price) |
++------------+
+|   150.0000 |
++------------+
+1 row in set (0.00 sec)
+
+8. Compute the number of products with a price larger than or equal to $180.
+mysql> select count(name) from products where price >= 180;
++-------------+
+| count(name) |
++-------------+
+|           5 |
++-------------+
+1 row in set (0.00 sec)
+
+
+9. Select the name and price of all products with a price larger than or equal to $180, and sort first by price (in descending order), and then by name (in ascending order).
+mysql> select name,price from products where price > 180 order by price desc;
++------------+-------+
+| name       | price |
++------------+-------+
+| Printer    |   270 |
+| Hard drive |   240 |
+| Monitor    |   240 |
++------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select name,price from products where price > 180 order by name;
++------------+-------+
+| name       | price |
++------------+-------+
+| Hard drive |   240 |
+| Monitor    |   240 |
+| Printer    |   270 |
++------------+-------+
+3 rows in set (0.00 sec)
+
+10. Select all the data from the products, including all the data for each product's manufacturer.
+
+----without inner join------
+mysql> select * from products,manufacturers where products.manufacturer = manufacturers.code;
++------+-----------------+-------+--------------+------+-----------------+
+| Code | Name            | Price | Manufacturer | Code | Name            |
++------+-----------------+-------+--------------+------+-----------------+
+|    5 | Monitor         |   240 |            1 |    1 | Sony            |
+|    6 | DVD drive       |   180 |            2 |    2 | Creative Labs   |
+|    7 | CD drive        |    90 |            2 |    2 | Creative Labs   |
+|   10 | DVD burner      |   180 |            2 |    2 | Creative Labs   |
+|    8 | Printer         |   270 |            3 |    3 | Hewlett-Packard |
+|    9 | Toner cartridge |    66 |            3 |    3 | Hewlett-Packard |
+|    3 | ZIP drive       |   150 |            4 |    4 | Iomega          |
+|    1 | Hard drive      |   240 |            5 |    5 | Fujitsu         |
+|    2 | Memory          |   120 |            6 |    6 | Winchester      |
+|    4 | Floppy disk     |     5 |            6 |    6 | Winchester      |
++------+-----------------+-------+--------------+------+-----------------+
+10 rows in set (0.00 sec)
+
+------with inner join-------------
+mysql> select * from products,manufacturers where products.manufacturer = manufacturers.code;
++------+-----------------+-------+--------------+------+-----------------+
+| Code | Name            | Price | Manufacturer | Code | Name            |
++------+-----------------+-------+--------------+------+-----------------+
+|    5 | Monitor         |   240 |            1 |    1 | Sony            |
+|    6 | DVD drive       |   180 |            2 |    2 | Creative Labs   |
+|    7 | CD drive        |    90 |            2 |    2 | Creative Labs   |
+|   10 | DVD burner      |   180 |            2 |    2 | Creative Labs   |
+|    8 | Printer         |   270 |            3 |    3 | Hewlett-Packard |
+|    9 | Toner cartridge |    66 |            3 |    3 | Hewlett-Packard |
+|    3 | ZIP drive       |   150 |            4 |    4 | Iomega          |
+|    1 | Hard drive      |   240 |            5 |    5 | Fujitsu         |
+|    2 | Memory          |   120 |            6 |    6 | Winchester      |
+|    4 | Floppy disk     |     5 |            6 |    6 | Winchester      |
++------+-----------------+-------+--------------+------+-----------------+
+10 rows in set (0.00 sec)
+
+
+11. Select the product name, price, and manufacturer name of all the products.
+----with inner join------
+mysql> select * from products,manufacturers where products.manufacturer = manufacturers.code;
++------+-----------------+-------+--------------+------+-----------------+
+| Code | Name            | Price | Manufacturer | Code | Name            |
++------+-----------------+-------+--------------+------+-----------------+
+|    5 | Monitor         |   240 |            1 |    1 | Sony            |
+|    6 | DVD drive       |   180 |            2 |    2 | Creative Labs   |
+|    7 | CD drive        |    90 |            2 |    2 | Creative Labs   |
+|   10 | DVD burner      |   180 |            2 |    2 | Creative Labs   |
+|    8 | Printer         |   270 |            3 |    3 | Hewlett-Packard |
+|    9 | Toner cartridge |    66 |            3 |    3 | Hewlett-Packard |
+|    3 | ZIP drive       |   150 |            4 |    4 | Iomega          |
+|    1 | Hard drive      |   240 |            5 |    5 | Fujitsu         |
+|    2 | Memory          |   120 |            6 |    6 | Winchester      |
+|    4 | Floppy disk     |     5 |            6 |    6 | Winchester      |
++------+-----------------+-------+--------------+------+-----------------+
+10 rows in set (0.00 sec)
+
+----without inner join-------------
+mysql> select * from products,manufacturers where products.manufacturer = manufacturers.code;
++------+-----------------+-------+--------------+------+-----------------+
+| Code | Name            | Price | Manufacturer | Code | Name            |
++------+-----------------+-------+--------------+------+-----------------+
+|    5 | Monitor         |   240 |            1 |    1 | Sony            |
+|    6 | DVD drive       |   180 |            2 |    2 | Creative Labs   |
+|    7 | CD drive        |    90 |            2 |    2 | Creative Labs   |
+|   10 | DVD burner      |   180 |            2 |    2 | Creative Labs   |
+|    8 | Printer         |   270 |            3 |    3 | Hewlett-Packard |
+|    9 | Toner cartridge |    66 |            3 |    3 | Hewlett-Packard |
+|    3 | ZIP drive       |   150 |            4 |    4 | Iomega          |
+|    1 | Hard drive      |   240 |            5 |    5 | Fujitsu         |
+|    2 | Memory          |   120 |            6 |    6 | Winchester      |
+|    4 | Floppy disk     |     5 |            6 |    6 | Winchester      |
++------+-----------------+-------+--------------+------+-----------------+
+10 rows in set (0.00 sec)
+
+
+
+12. Select the average price of each manufacturer's products, showing only the manufacturer's code.
+
+mysql> select avg(price),manufacturer from products group by manufacturer;
++------------+--------------+
+| avg(price) | manufacturer |
++------------+--------------+
+|   240.0000 |            1 |
+|   150.0000 |            2 |
+|   168.0000 |            3 |
+|   150.0000 |            4 |
+|   240.0000 |            5 |
+|    62.5000 |            6 |
++------------+--------------+
+6 rows in set (0.01 sec)
+
+13. Select the average price of each manufacturer's products, showing the manufacturer's name.
+---------without inner join------
+mysql> select avg(price),manufacturers.name from products,manufacturers where products.manufacturer = manufacturers.code group by manufacturers.name
+    -> ;
++------------+-----------------+
+| avg(price) | name            |
++------------+-----------------+
+|   194.0000 | Sony            |
+|   109.0000 | Creative Labs   |
+|   139.0000 | Hewlett-Packard |
+|   122.0000 | Iomega          |
+|   194.0000 | Fujitsu         |
+|    56.5000 | Winchester      |
++------------+-----------------+
+6 rows in set (0.00 sec)
+
+----------with inner join------
+mysql> select avg(price),manufacturers.name from products inner join manufacturers on products.manufacturer = manufacturers.code group by manufacturers.name;
++------------+-----------------+
+| avg(price) | name            |
++------------+-----------------+
+|   194.0000 | Sony            |
+|   109.0000 | Creative Labs   |
+|   139.0000 | Hewlett-Packard |
+|   122.0000 | Iomega          |
+|   194.0000 | Fujitsu         |
+|    56.5000 | Winchester      |
++------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql>
+
+14. Select the names of manufacturer whose products have an average price larger than or equal to $150.
+
+--------with inner join-----------------
+mysql> select avg(price),manufacturers.name from products inner join manufacturers on products.manufacturer = manufacturers.code group by manufacturers.name having avg(price) >= 150;
++------------+---------+
+| avg(price) | name    |
++------------+---------+
+|   194.0000 | Sony    |
+|   194.0000 | Fujitsu |
++------------+---------+
+2 rows in set (0.00 sec)
+
+
+----------without inner join--------------------
+mysql> select avg(price),manufacturers.name from products,manufacturers where products.manufacturer = manufacturers.code group by manufacturers.name having avg(price) >= 150;
++------------+---------+
+| avg(price) | name    |
++------------+---------+
+|   194.0000 | Sony    |
+|   194.0000 | Fujitsu |
++------------+---------+
+2 rows in set (0.00 sec)
+
+15. Select the name and price of the cheapest product.
+mysql> select name,price from products where price in (select min(price) from products);
++-------------+-------+
+| name        | price |
++-------------+-------+
+| Floppy disk |     5 |
++-------------+-------+
+1 row in set (0.01 sec)
+
+
+16. Select the name of each manufacturer along with the name and price of its most expensive product.
+----------with inner join---------------
+mysql> select a.name,a.price,f.name from products a ,manufacturers f where a.manufacturer = f.code and  a.price =(select max(a.price) from products a where a.manufacturer = f.code);
++---------------+-------+-----------------+
+| name          | price | name            |
++---------------+-------+-----------------+
+| Monitor       |   194 | Sony            |
+| DVD drive     |   146 | Creative Labs   |
+| DVD burner    |   146 | Creative Labs   |
+| Laser Printer |   219 | Hewlett-Packard |
+| ZIP drive     |   122 | Iomega          |
+| Hard drive    |   194 | Fujitsu         |
+| Memory        |   108 | Winchester      |
++---------------+-------+-----------------+
+
+------------with inner join------------
+mysql> select a.name,a.price,f.name from products a inner join manufacturers f where a.manufacturer = f.code and  a.price =(select max(a.price) from products a where a.manufacturer = f.code);
++---------------+-------+-----------------+
+| name          | price | name            |
++---------------+-------+-----------------+
+| Monitor       |   194 | Sony            |
+| DVD drive     |   146 | Creative Labs   |
+| DVD burner    |   146 | Creative Labs   |
+| Laser Printer |   219 | Hewlett-Packard |
+| ZIP drive     |   122 | Iomega          |
+| Hard drive    |   194 | Fujitsu         |
+| Memory        |   108 | Winchester      |
++---------------+-------+-----------------+
+7 rows in set (0.02 sec)
+
+
+17. Add a new product: Loudspeakers, $70, manufacturer 2.
+mysql> insert into products values(11,'Loudspeakers',70,2);
+Query OK, 1 row affected (0.07 sec)
+
+
+18. Update the name of product 8 to "Laser Printer".
+mysql> update products set name = 'Laser Printer' where code = 8;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+19. Apply a 10% discount to all products.
+mysql> update products set price = price-(price*0.1);
+Query OK, 10 rows affected, 2 warnings (0.07 sec)
+Rows matched: 11  Changed: 10  Warnings: 2
+
+mysql> select * from products;
++------+-----------------+-------+--------------+
+| Code | Name            | Price | Manufacturer |
++------+-----------------+-------+--------------+
+|    1 | Hard drive      |   216 |            5 |
+|    2 | Memory          |   108 |            6 |
+|    3 | ZIP drive       |   135 |            4 |
+|    4 | Floppy disk     |     5 |            6 |
+|    5 | Monitor         |   216 |            1 |
+|    6 | DVD drive       |   162 |            2 |
+|    7 | CD drive        |    81 |            2 |
+|    8 | Laser Printer   |   243 |            3 |
+|    9 | Toner cartridge |    59 |            3 |
+|   10 | DVD burner      |   162 |            2 |
+|   11 | Loudspeakers    |    63 |            2 |
++------+-----------------+-------+--------------+
+11 rows in set (0.00 sec)
+
+
+20. Apply a 10% discount to all products with a price larger than or equal to $120.
+mysql> select * from products;
++------+-----------------+-------+--------------+
+| Code | Name            | Price | Manufacturer |
++------+-----------------+-------+--------------+
+|    1 | Hard drive      |   216 |            5 |
+|    2 | Memory          |   108 |            6 |
+|    3 | ZIP drive       |   135 |            4 |
+|    4 | Floppy disk     |     5 |            6 |
+|    5 | Monitor         |   216 |            1 |
+|    6 | DVD drive       |   162 |            2 |
+|    7 | CD drive        |    81 |            2 |
+|    8 | Laser Printer   |   243 |            3 |
+|    9 | Toner cartridge |    59 |            3 |
+|   10 | DVD burner      |   162 |            2 |
+|   11 | Loudspeakers    |    63 |            2 |
++------+-----------------+-------+--------------+
+11 rows in set (0.00 sec)
+
+mysql> update products set price = price-(price*0.1) where price >=120;
+Query OK, 6 rows affected, 6 warnings (0.09 sec)
+Rows matched: 6  Changed: 6  Warnings: 6
+
+mysql> select * from products;
++------+-----------------+-------+--------------+
+| Code | Name            | Price | Manufacturer |
++------+-----------------+-------+--------------+
+|    1 | Hard drive      |   194 |            5 |
+|    2 | Memory          |   108 |            6 |
+|    3 | ZIP drive       |   122 |            4 |
+|    4 | Floppy disk     |     5 |            6 |
+|    5 | Monitor         |   194 |            1 |
+|    6 | DVD drive       |   146 |            2 |
+|    7 | CD drive        |    81 |            2 |
+|    8 | Laser Printer   |   219 |            3 |
+|    9 | Toner cartridge |    59 |            3 |
+|   10 | DVD burner      |   146 |            2 |
+|   11 | Loudspeakers    |    63 |            2 |
++------+-----------------+-------+--------------+
+11 rows in set (0.00 sec)
+
+
+
+
+
+
+
